@@ -16,11 +16,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final UserRespository userRespository;
+    private final UserRespository userRepository;
 
     public CustomOAuth2UserService(UserRespository userRespository) {
 
-        this.userRespository = userRespository;
+        this.userRepository = userRespository;
     }
 
     @Override
@@ -49,17 +49,17 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         //리소스 서버에서 발급 받은 정보로 사용자를 특정할 아이디값을 만듬
         String username = oAuth2Response.getProvider()+" "+oAuth2Response.getProviderId();
-        UserEntity exitData = userRespository.findByUsername(username);
+        UserEntity existData = userRepository.findByUsername(username);
 
         //데이터가 존재하지 않는경우
-        if(exitData == null) {
+        if(existData == null) {
             UserEntity userEntity = new UserEntity();
             userEntity.setUsername(username);
             userEntity.setEmail(oAuth2Response.getEmail());
             userEntity.setName(oAuth2Response.getName());
             userEntity.setRole("ROLE_USER");
 
-            userRespository.save(userEntity);
+            userRepository.save(userEntity);
 
             UserDTO userDTO = new UserDTO();
             userDTO.setUsername(username);
